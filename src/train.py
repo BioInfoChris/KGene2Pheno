@@ -20,6 +20,9 @@ from sklearn.metrics import confusion_matrix
 
 from src.utils import timer_func, evaluate_emb_model
 
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter()
+
 @timer_func
 def train(method, dataset, config, timestart, logger, device):
     """
@@ -179,6 +182,7 @@ def train(method, dataset, config, timestart, logger, device):
             h, t, r, n_h, n_t = h.to(device), t.to(device), r.to(device), n_h.to(device), n_t.to(device)
             pos, neg = emb_model(h, t, r, n_h, n_t)
             loss = criterion(pos, neg)
+            writer.add_scalar("Loss/Train", loss, epoch)
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
@@ -192,6 +196,8 @@ def train(method, dataset, config, timestart, logger, device):
             emb_model.normalize_parameters()
 
     logger.info(f'{dt.now()} - Finished Training of {method} !\n')
+    writer.flush()
+    writer.close()
 
     # Save the model and/or the data
     if os.path.exists('models') == False:

@@ -15,7 +15,7 @@ Make sure you have the following dependencies installed:
 You can install the dependencies using the following command line or with the provided requirements.txt file:
 
 ```bash
-pip install torchkge pycaret torch SPARQLWrapper pandas numpy
+pip install torchkge pycaret torch SPARQLWrapper pandas numpy tensorboard torchvision
 ```
 ```bash
 pip install -r requirements.txt
